@@ -13,10 +13,9 @@ with open(input_file_path) as file:
             if line != "\n":
                 line = line.replace("\n", "")
                 row = line.split(" ")
-                # remove empty strings which are generated because sometimes there are two spaces between two numbers
                 while("" in row):
+                    # remove empty strings which are generated because sometimes there are two spaces between two numbers
                     row.remove("")
-
                 list_of_rows.append(row)
 
 
@@ -39,7 +38,7 @@ def mark_number_as_drawn(str_number, list):
 
 
 def check_for_winner(list):
-    # function to check for the first board to have an empty row
+    # function to check for the first board to have an empty row or column
     for index, board in enumerate(list):
         # check for an empty row
         for row in board:
@@ -49,7 +48,7 @@ def check_for_winner(list):
             else:
                 # print(row)
                 pass
-        # generate columns for board and check for an empty column
+        # transform columns into lists and check for an empty column
         transformed_board = []
         number_of_columns = 5
         for column_index in range(number_of_columns):
@@ -67,7 +66,6 @@ def check_for_winner(list):
 # read drawing order from input file, drop numbers and check for winners sequentially
 file = open(input_file_path, "r")
 drawing_order = file.readline().strip("\n").split(",")
-
 for str_number in drawing_order:
     mark_number_as_drawn(str_number, list_of_boards)
     winner = check_for_winner(list_of_boards)
@@ -84,5 +82,6 @@ for row in winning_board:
 flattened_winning_board = [int(cell) for row in winning_board for cell in row]
 sum_of_unmarked_numbers = sum(flattened_winning_board)
 
+# calculate score
 score = sum_of_unmarked_numbers * winning_number
 print(score)
