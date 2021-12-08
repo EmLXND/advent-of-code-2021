@@ -605,6 +605,10 @@ bingo_boards_list_of_strings = [
 '87 14 13 64 12']
 
 
+
+
+
+
 #create a data frame containing all boards
 bingo_boards_df = pd.DataFrame([], columns = ["A", "B", "C", "D", "E"])     #at this point the data frame is empty
 #A, B, C, D and E represent the five columns of each board
@@ -624,6 +628,10 @@ for i in bingo_boards_list_of_strings:
     bingo_boards_df.loc[current_df_length] = data   #else we append the row at the end the board data frame
 
 print(bingo_boards_df)  # we see a 500x5 data frame with all boards integrated
+
+
+
+
 
 
 #which row will be the first full row?
@@ -646,6 +654,11 @@ winning_board_row =  (index_of_minimum // 5) + 1                                
 print("The fewest amount of numbers called to fill a row was " + str(minimum_to_fill_row+1) + " numbers, with "
 + str(list_for_winning_row.count(minimum_to_fill_row)) + " row(s) that was filled at this time." +
 " Therefore one winning board (by row) is the board number " + str(winning_board_row) + ".")
+
+
+
+
+
 
 #now which column on which bingo board will be the first full column?
 list_for_winning_column = []                        #again we write in this list how many numbers must be called to fill a column, and we do this for each column, so that the list should contain 100x5 elements at the end
@@ -679,6 +692,10 @@ print("The fewest amount of numbers called to fill a column was " + str(minimum_
 + str(list_for_winning_column.count(minimum_to_fill_column)) + " columns that was filled at this time." +
 " Therefore one winning board ist the board number " + str(winning_board_column) + ".")
 
+
+
+
+
 #depending on if a row was filled first, or a column was filled first, we derive the "winning number" and the winning board
 if minimum_to_fill_row < minimum_to_fill_column:        #if fow was filled first
     final_winning_board = winning_board_row
@@ -692,6 +709,10 @@ else:
     final_winning_board = winning_board_column              #else a column was filled first
     final_winning_board_last_number = called_numbers_list[minimum_to_fill_column]
 print("The winner is board " + str(final_winning_board))
+
+
+
+
 
 #calculate score
 all_numbers_on_final_winning_board_list = []                                    #initialize by empty list
