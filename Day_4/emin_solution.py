@@ -1,11 +1,6 @@
-import os
-
-# find file in folder structure
-input_file_name = "emin-input.txt"
-input_file_path = os.path.join(os.path.dirname(__file__), input_file_name)
-
 # read bingo boards from input file
-with open(input_file_path) as file:
+input_file = "emin_input.txt"
+with open(input_file) as file:
     list_of_rows = []
     for index, line in enumerate(file):
         # skip first two lines
@@ -64,7 +59,7 @@ def check_for_winner(list):
 
 
 # read drawing order from input file, drop numbers and check for winners sequentially
-file = open(input_file_path, "r")
+file = open(input_file, "r")
 drawing_order = file.readline().strip("\n").split(",")
 for str_number in drawing_order:
     mark_number_as_drawn(str_number, list_of_boards)
