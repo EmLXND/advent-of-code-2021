@@ -32,17 +32,29 @@ def mark_number_as_drawn(str_number, list):
                     row[index] = "drawn"
 
 
-def check_for_winner(list):
-    # function to check for the first board to have an empty row or column
+def get_winner(list):
+    winning_board_indices = []
+    first_winning_board = None
+    winning_index = None
+    # function to check for the first board to have an empty row or column,
+    # drops that board from the list
     for index, board in enumerate(list):
+        if board == "won":
+            continue
         # check for an empty row
+        row_won = False
         for row in board:
             if all(value == "drawn" for value in row):
-                # print(row)
-                return index
+                row_won = True
+                if first_winning_board == None:
+                    first_winning_board = board
+                winning_board_indices.append(index)
+                break
             else:
-                # print(row)
                 pass
+        # if row has won, board is dropped, no need to check columns
+        if row_won == True:
+            continue
         # transform columns into lists and check for an empty column
         transformed_board = []
         number_of_columns = 5
@@ -51,32 +63,58 @@ def check_for_winner(list):
             for row_index, row in enumerate(board):
                 column.append(row[column_index])
             transformed_board.append(column)
-            for column in transformed_board:
-                if all(value == "drawn" for value in column):
-                    return index
-                else:
-                    pass
+        for column in transformed_board:
+            if all(value == "drawn" for value in column):
+                if first_winning_board == None:
+                    first_winning_board = board
+                winning_board_indices.append(index)
+                break
+            else:
+                pass
+    for index in winning_board_indices:
+        list[index] = "won"
+    return first_winning_board
 
 
 # read drawing order from input file, drop numbers and check for winners sequentially
 file = open(input_file, "r")
 drawing_order = file.readline().strip("\n").split(",")
-for str_number in drawing_order:
+
+first_winner = None
+last_winner = None
+for index, str_number in enumerate(drawing_order):
     mark_number_as_drawn(str_number, list_of_boards)
-    winner = check_for_winner(list_of_boards)
+    winner = get_winner(list_of_boards)
+    # save the first winner
     if winner != None:
-        # save last drawn winning number for final calculation of score
-        winning_number = int(str_number)
+        # save the board which wins first
+        if first_winner == None:
+            first_winner = winner
+            first_winning_number = int(str_number)
+        # and keep saving the last board to win to know which board would win last :)
+        last_winner = winner
+        last_winning_number = int(str_number)
+    if len(list_of_boards) == 0:
         break
 
-# get sums of all unmarked numbers
-winning_board = list_of_boards[winner]
-for row in winning_board:
-    while("drawn" in row):
-        row.remove("drawn")
-flattened_winning_board = [int(cell) for row in winning_board for cell in row]
-sum_of_unmarked_numbers = sum(flattened_winning_board)
 
-# calculate score
-score = sum_of_unmarked_numbers * winning_number
-print(score)
+def get_sum_of_unmarked_numbers(board):
+    # get sums of all unmarked numbers
+    for row in board:
+        while("drawn" in row):
+            row.remove("drawn")
+    flattened_winning_board = [int(cell)
+                               for row in board for cell in row]
+    sum_of_unmarked_numbers = sum(flattened_winning_board)
+    return sum_of_unmarked_numbers
+
+
+# calculate score for winning board (1st half of task)
+first_winner_score = get_sum_of_unmarked_numbers(
+    first_winner) * first_winning_number
+print("first winning board score:", first_winner_score)
+
+# now on to losing board (= board to win last) score (2nd half of task)
+last_winner_score = get_sum_of_unmarked_numbers(
+    last_winner) * last_winning_number
+print("last winning board score:", last_winner_score)
