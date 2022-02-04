@@ -1,0 +1,1 @@
+Advent of Code was a challenge we tried to tackle during December 2021.
